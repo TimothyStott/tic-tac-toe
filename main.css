@@ -1,0 +1,39 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --chalk-white: #e0dbd1;
+}
+
+main{
+    height: 100vh;
+    display: grid;
+    grid-auto-rows: auto;
+    justify-content: center;
+    background-color: lightgray;
+
+}
+
+.board-game-container{
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(3, auto);
+    background: url("./img/chalk-board.jpg");
+    height: min-content;
+}
+
+.game-square{
+    display: grid;
+    width: clamp(150px, 10vw, 250px);
+    height: clamp(150px, vh, 300px);
+    border: solid .2rem var(--chalk-white);
+}
+
+.game-square-content{
+    font-family: sans-serif;
+    place-self: center;
+    color: var(--chalk-white);
+    font-size: 8rem;
+}
