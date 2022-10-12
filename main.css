@@ -26,9 +26,11 @@ main{
 
 .game-square{
     display: grid;
-    width: clamp(150px, 10vw, 250px);
-    height: clamp(150px, vh, 300px);
+    width: 10vw;
+    height: 10vw;
     border: solid .2rem var(--chalk-white);
+    min-width: 150px;
+    min-height: 150px;
 }
 
 .game-square-content{
@@ -36,4 +38,6 @@ main{
     place-self: center;
     color: var(--chalk-white);
     font-size: 8rem;
+    height: 100%;
+    width: 100%;
 }
