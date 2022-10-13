@@ -3,6 +3,9 @@ const winningSetArray = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], 
 const gameSquares = document.querySelectorAll(".game-square-content");
 const gameSquareText = document.querySelectorAll(".game-square-text");
 const resetButton = document.getElementById("reset");
+const changePlayersButton = document.getElementById('change-players');
+const modalContainer = document.querySelector('.modal-container');
+const playerCreateButton = document.getElementById('player-create-button');
 let gameboardArray = ["", "", "", "", "", "", "", "", ""];
 let winner = undefined;
 let turn = 0;
@@ -13,6 +16,9 @@ let turn = 0;
 /*Event Listeners*/
 gameSquares.forEach(square => square.addEventListener('click', playerSelectionTurnKeeper))
 resetButton.addEventListener('click',resetGame);
+changePlayersButton.addEventListener('click',toggleModalHide);
+playerCreateButton.addEventListener('click',createPlayers);
+
 
 
 const Player = (name) => {
@@ -32,11 +38,11 @@ function checkForWin() {
             switch (gameboardArray[a]) {
                 case "X":
                     winner = playerArray[0];
-                    console.log(winner);
+                    console.log(winner._name);
                     return winnerFound;
                 case "O":
                     winner = playerArray[1];
-                    console.log(winner);
+                    console.log(winner._name);
                     return winnerFound;
             }
         }
@@ -80,7 +86,8 @@ function fillSquares() {
 }
 
 function checkForValidMove(e){
-    let selected = parseInt(e.originalTarget.id);
+    console.log(e);
+    let selected = parseInt(e.target.id);
     if(gameboardArray[selected]==""){
         switch(turn){
             case 0:
@@ -108,8 +115,24 @@ function resetGame (){
 }
 
 function createPlayers(){
-    let p1 = Player("");
-    let p2 = Player("");
-    playerArray[0] = p1;
-    playerArray[1] = p2;
+    const playerOneTextBox = document.getElementById('player-one-name');
+    const playerTwoTextBox = document.getElementById('player-two-name');
+    
+    let player1 = Player(playerOneTextBox.value);
+    let player2 = Player(playerTwoTextBox.value);
+
+    playerArray[0]=player1;
+    playerArray[1]=player2;
+
+    console.log(playerArray);
+    toggleModalHide();
+    resetGame();
+    fillSquares();
+
 }
+
+function toggleModalHide(){
+    modalContainer.classList.toggle('hide');
+}
+
+
