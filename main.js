@@ -17,19 +17,22 @@ let turn = 0;
 
 
 /*Event Listeners*/
-gameSquares.forEach(square => square.addEventListener('click', playerSelectionTurnKeeper))
+gameSquares.forEach(square => square.addEventListener('click', playRound))
 resetButton.addEventListener('click', resetGame);
 changePlayersButton.addEventListener('click', toggleModalHide);
 playerCreateButton.addEventListener('click', createPlayers);
+window.addEventListener('mouseover', checkForAiTurn);
 
 
-
-const Player = (name) => {
+/*Player Contructor*/
+const Player = (name, isAI) => {
     const _name = name
     let _wincount = 0;
-    return { _name, _wincount}
+    let _isAI = isAI;
+    return { _name, _wincount, _isAI}
 }
 
+/*Condition Check Functions*/
 function checkForWin() {
     let winnerFound = false;
     for (let [a, b, c] of winningSetArray) {
@@ -39,12 +42,10 @@ function checkForWin() {
                 case "X":
                     winner = playerArray[0];
                     playerArray[0]._wincount++;
-                    console.log(winner);
                     return winnerFound;
                 case "O":
                     winner = playerArray[1];
                     playerArray[1]._wincount++;
-                    console.log(winner);
                     return winnerFound;
             }
         }
@@ -63,23 +64,7 @@ function checkForTie() {
     return tieFound;
 }
 
-function playerSelectionTurnKeeper(e) {
-
-    if (winner == undefined && !checkForTie()) {
-        checkForValidMove(e);
-        switch (turn) {
-            case 0:
-                turn++;
-                fillTurnKeeper();
-                break;
-            case 1:
-                turn--;
-                fillTurnKeeper();
-                break;
-        }
-    }
-}
-
+/*Display Functions*/
 function fillSquares() {
     for (let i = 0; i < gameSquareText.length; i++) {
         gameSquareText[i].innerText = gameboardArray[i];
@@ -87,56 +72,9 @@ function fillSquares() {
 
     if(checkForWin()){
         fillScoreCard();
+        alert(`The winner was recorded and the board is being reset.`);
+        resetGame();
     }
-}
-
-function checkForValidMove(e) {
-    let selected = parseInt(e.target.id);
-    if (gameboardArray[selected] == "") {
-        switch (turn) {
-            case 0:
-                gameboardArray[selected] = "X";
-                break;
-            case 1:
-                gameboardArray[selected] = "O"
-                break;
-        }
-    }
-    else {
-        alert("Invalid Move");
-    }
-    fillSquares();
-}
-
-function resetGame() {
-    for (let i = 0; i < gameboardArray.length; i++) {
-        gameboardArray[i] = "";
-    }
-    winner = undefined;
-    fillSquares();
-
-}
-
-function createPlayers() {
-    const playerOneTextBox = document.getElementById('player-one-name');
-    const playerTwoTextBox = document.getElementById('player-two-name');
-
-    let player1 = Player(playerOneTextBox.value);
-    let player2 = Player(playerTwoTextBox.value);
-
-    playerArray[0] = player1;
-    playerArray[1] = player2;
-
-    toggleModalHide();
-    resetGame();
-    fillSquares();
-    fillScoreCard();
-    fillTurnKeeper();
-    fillNameDispaly();
-}
-
-function toggleModalHide() {
-    modalContainer.classList.toggle('hide');
 }
 
 function fillScoreCard() {
@@ -163,8 +101,112 @@ function fillNameDispaly() {
     }
     else{
         playerTwoNameDispaly.innerHTML = "Player 2";
-    }}
+    }
+}
+
+/*Button functions*/
+function createPlayers() {
+    const playerOneTextBox = document.getElementById('player-one-name');
+    const playerTwoTextBox = document.getElementById('player-two-name');
+    const playerOneAiCBox = document.getElementById('ai-checkbox-one');
+    const playerTwoAiCBox = document.getElementById('ai-checkbox-two');
+
+    let player1 = Player(playerOneTextBox.value,playerOneAiCBox.checked);
+    let player2 = Player(playerTwoTextBox.value,playerTwoAiCBox.checked);
+
+    playerArray[0] = player1;
+    playerArray[1] = player2;
+
+    toggleModalHide();
+    resetGame();
+    fillSquares();
+    fillScoreCard();
+    fillTurnKeeper();
+    fillNameDispaly();
+}
+
+function toggleModalHide() {
+    modalContainer.classList.toggle('hide');
+}
+
+function resetGame() {
+    for (let i = 0; i < gameboardArray.length; i++) {
+        gameboardArray[i] = "";
+    }
+    winner = undefined;
+    fillSquares();
+
+}
+
+/*Game Logic Functions*/
+function playRound(e) {
+    if(!checkForWin()){
+
+    if (winner == undefined && !checkForTie()) {
+        checkForValidMove(e);
+        switch (turn) {
+            case 0:
+                turn++;
+                fillTurnKeeper();
+                break;
+            case 1:
+                turn--;
+                fillTurnKeeper();
+                break;
+        }
+    }
+}
+}
+
+function checkForValidMove(e) {
+    let selected = parseInt(e.target.id);
+    if (gameboardArray[selected] == "") {
+        switch (turn) {
+            case 0:
+                gameboardArray[selected] = "X";
+                break;
+            case 1:
+                gameboardArray[selected] = "O"
+                break;
+        }
+    }
+    else {
+        alert("Invalid Move");
+    }
+    fillSquares();
+}
 
 
+
+function checkForAiTurn(){
+    if(playerArray[0]._isAI==true&&turn==0||playerArray[1]._isAI&&turn==1){
+        makeAIMoveDumb();
+    }
+
+}
+
+
+function makeAIMoveDumb(){
+    const toFind = (element) => element == "";
+
+    switch(turn){
+        case 0:
+            gameboardArray[gameboardArray.findIndex(toFind)]="X";
+            fillSquares();
+            turn++;
+            break;
+        case 1:
+            gameboardArray[gameboardArray.findIndex(toFind)]="O";
+            fillSquares();
+            turn--;
+            break;            
+    }
+    
+
+    
+}
+
+
+/*Intialize Turn keeper while in testing*/
 fillTurnKeeper();
 
