@@ -21,7 +21,7 @@ gameSquares.forEach(square => square.addEventListener('click', playRound))
 resetButton.addEventListener('click', resetGame);
 changePlayersButton.addEventListener('click', toggleModalHide);
 playerCreateButton.addEventListener('click', createPlayers);
-window.addEventListener('mouseover', checkForAiTurn);
+window.addEventListener('mousemove', checkForAiTurn);
 
 
 /*Player Contructor*/
@@ -29,7 +29,7 @@ const Player = (name, isAI) => {
     const _name = name
     let _wincount = 0;
     let _isAI = isAI;
-    return { _name, _wincount, _isAI}
+    return { _name, _wincount, _isAI }
 }
 
 /*Condition Check Functions*/
@@ -70,7 +70,7 @@ function fillSquares() {
         gameSquareText[i].innerText = gameboardArray[i];
     };
 
-    if(checkForWin()){
+    if (checkForWin()) {
         fillScoreCard();
         alert(`The winner was recorded and the board is being reset.`);
         resetGame();
@@ -92,14 +92,14 @@ function fillNameDispaly() {
     if (playerArray[0]._name != "") {
         playerOneNameDispaly.innerHTML = playerArray[0]._name;
     }
-    else{
+    else {
         playerOneNameDispaly.innerHTML = "Player 1";
 
     }
     if (playerArray[1]._name != "") {
         playerTwoNameDispaly.innerHTML = playerArray[1]._name;
     }
-    else{
+    else {
         playerTwoNameDispaly.innerHTML = "Player 2";
     }
 }
@@ -111,8 +111,8 @@ function createPlayers() {
     const playerOneAiCBox = document.getElementById('ai-checkbox-one');
     const playerTwoAiCBox = document.getElementById('ai-checkbox-two');
 
-    let player1 = Player(playerOneTextBox.value,playerOneAiCBox.checked);
-    let player2 = Player(playerTwoTextBox.value,playerTwoAiCBox.checked);
+    let player1 = Player(playerOneTextBox.value, playerOneAiCBox.checked);
+    let player2 = Player(playerTwoTextBox.value, playerTwoAiCBox.checked);
 
     playerArray[0] = player1;
     playerArray[1] = player2;
@@ -140,27 +140,35 @@ function resetGame() {
 
 /*Game Logic Functions*/
 function playRound(e) {
-    if(!checkForWin()){
+    if (!checkForWin()) {
 
-    if (winner == undefined && !checkForTie()) {
-        checkForValidMove(e);
-        switch (turn) {
-            case 0:
-                turn++;
-                fillTurnKeeper();
-                break;
-            case 1:
-                turn--;
-                fillTurnKeeper();
-                break;
-        }
+        if (winner == undefined && !checkForTie()) {
+            if(checkForValidMove(e)){
+
+            switch (turn) {
+                case 0:
+                    turn++;
+                    fillTurnKeeper();
+                    break;
+                case 1:
+                    turn--;
+                    fillTurnKeeper();
+                    break;
+            }
+        }}
     }
 }
-}
+
+
 
 function checkForValidMove(e) {
     let selected = parseInt(e.target.id);
-    if (gameboardArray[selected] == "") {
+    let isValid = true;
+    if(gameboardArray[selected]!=""){
+        alert("Invalid Move");
+        isValid = false;
+    }
+    else if (isValid) {
         switch (turn) {
             case 0:
                 gameboardArray[selected] = "X";
@@ -170,40 +178,40 @@ function checkForValidMove(e) {
                 break;
         }
     }
-    else {
-        alert("Invalid Move");
-    }
     fillSquares();
+    return(isValid);
 }
 
 
 
-function checkForAiTurn(){
-    if(playerArray[0]._isAI==true&&turn==0||playerArray[1]._isAI&&turn==1){
+function checkForAiTurn() {
+    if (playerArray[0]._isAI == true && turn == 0 || playerArray[1]._isAI && turn == 1) {
         makeAIMoveDumb();
     }
 
 }
 
 
-function makeAIMoveDumb(){
+function makeAIMoveDumb() {
     const toFind = (element) => element == "";
 
-    switch(turn){
+    switch (turn) {
         case 0:
-            gameboardArray[gameboardArray.findIndex(toFind)]="X";
-            fillSquares();
+            gameboardArray[gameboardArray.findIndex(toFind)] = "X";
             turn++;
+            fillSquares();
+            fillTurnKeeper();
             break;
         case 1:
-            gameboardArray[gameboardArray.findIndex(toFind)]="O";
-            fillSquares();
+            gameboardArray[gameboardArray.findIndex(toFind)] = "O";
             turn--;
-            break;            
+            fillSquares();
+            fillTurnKeeper();
+            break;
     }
-    
 
-    
+
+
 }
 
 
