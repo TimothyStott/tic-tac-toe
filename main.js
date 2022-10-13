@@ -6,6 +6,9 @@ const resetButton = document.getElementById("reset");
 const changePlayersButton = document.getElementById('change-players');
 const modalContainer = document.querySelector('.modal-container');
 const playerCreateButton = document.getElementById('player-create-button');
+const turnKeeperDisplay = document.querySelector('.turn-dispay');
+const playerOneNameDispaly = document.querySelector('.player-one-name-display');
+const playerTwoNameDispaly = document.querySelector('.player-two-name-display');
 let gameboardArray = ["", "", "", "", "", "", "", "", ""];
 let winner = undefined;
 let turn = 0;
@@ -15,19 +18,16 @@ let turn = 0;
 
 /*Event Listeners*/
 gameSquares.forEach(square => square.addEventListener('click', playerSelectionTurnKeeper))
-resetButton.addEventListener('click',resetGame);
-changePlayersButton.addEventListener('click',toggleModalHide);
-playerCreateButton.addEventListener('click',createPlayers);
+resetButton.addEventListener('click', resetGame);
+changePlayersButton.addEventListener('click', toggleModalHide);
+playerCreateButton.addEventListener('click', createPlayers);
 
 
 
 const Player = (name) => {
     const _name = name
-    const _wincount = 0;
-    const win = () => wincount++
-    const resetWinCount = () => wincount = 0;
-    const logWinCount = () => console.log(wincount);
-    return { _name, _wincount, win, resetWinCount, logWinCount }
+    let _wincount = 0;
+    return { _name, _wincount}
 }
 
 function checkForWin() {
@@ -38,44 +38,45 @@ function checkForWin() {
             switch (gameboardArray[a]) {
                 case "X":
                     winner = playerArray[0];
-                    console.log(winner._name);
+                    playerArray[0]._wincount++;
+                    console.log(winner);
                     return winnerFound;
                 case "O":
                     winner = playerArray[1];
-                    console.log(winner._name);
+                    playerArray[1]._wincount++;
+                    console.log(winner);
                     return winnerFound;
             }
         }
     }
+
+
 }
 
-function checkForTie(){
+function checkForTie() {
     let tieFound = true;
-    for(let i = 0; i<gameboardArray.length; i++)
-    {
-        if(gameboardArray[i] == ""){
-             tieFound = false;
+    for (let i = 0; i < gameboardArray.length; i++) {
+        if (gameboardArray[i] == "") {
+            tieFound = false;
         }
     }
     return tieFound;
 }
 
 function playerSelectionTurnKeeper(e) {
-    checkForWin();
-    if(winner==undefined && !checkForTie()){
-    checkForValidMove(e);
-    switch (turn) {
-        case 0:
-            turn++;
-            break;
-        case 1:
-            turn--;
-            break;
+
+    if (winner == undefined && !checkForTie()) {
+        checkForValidMove(e);
+        switch (turn) {
+            case 0:
+                turn++;
+                fillTurnKeeper();
+                break;
+            case 1:
+                turn--;
+                fillTurnKeeper();
+                break;
         }
-    }
-    checkForWin();
-    if(winner!=undefined){
-        console.log(winner._name);
     }
 }
 
@@ -83,13 +84,16 @@ function fillSquares() {
     for (let i = 0; i < gameSquareText.length; i++) {
         gameSquareText[i].innerText = gameboardArray[i];
     };
+
+    if(checkForWin()){
+        fillScoreCard();
+    }
 }
 
-function checkForValidMove(e){
-    console.log(e);
+function checkForValidMove(e) {
     let selected = parseInt(e.target.id);
-    if(gameboardArray[selected]==""){
-        switch(turn){
+    if (gameboardArray[selected] == "") {
+        switch (turn) {
             case 0:
                 gameboardArray[selected] = "X";
                 break;
@@ -98,41 +102,69 @@ function checkForValidMove(e){
                 break;
         }
     }
-    else{
+    else {
         alert("Invalid Move");
     }
     fillSquares();
 }
 
-function resetGame (){
-    for(let i = 0; i < gameboardArray.length; i++){
+function resetGame() {
+    for (let i = 0; i < gameboardArray.length; i++) {
         gameboardArray[i] = "";
     }
     winner = undefined;
-
     fillSquares();
-    
+
 }
 
-function createPlayers(){
+function createPlayers() {
     const playerOneTextBox = document.getElementById('player-one-name');
     const playerTwoTextBox = document.getElementById('player-two-name');
-    
+
     let player1 = Player(playerOneTextBox.value);
     let player2 = Player(playerTwoTextBox.value);
 
-    playerArray[0]=player1;
-    playerArray[1]=player2;
+    playerArray[0] = player1;
+    playerArray[1] = player2;
 
-    console.log(playerArray);
     toggleModalHide();
     resetGame();
     fillSquares();
-
+    fillScoreCard();
+    fillTurnKeeper();
+    fillNameDispaly();
 }
 
-function toggleModalHide(){
+function toggleModalHide() {
     modalContainer.classList.toggle('hide');
 }
 
+function fillScoreCard() {
+    const score1 = document.querySelector('.p1-score-display');
+    const score2 = document.querySelector('.p2-score-display');
+    score1.innerHTML = playerArray[0]._wincount;
+    score2.innerHTML = playerArray[1]._wincount;
+}
+
+function fillTurnKeeper() {
+    turnKeeperDisplay.innerText = turn + 1;
+}
+
+function fillNameDispaly() {
+    if (playerArray[0]._name != "") {
+        playerOneNameDispaly.innerHTML = playerArray[0]._name;
+    }
+    else{
+        playerOneNameDispaly.innerHTML = "Player 1";
+
+    }
+    if (playerArray[1]._name != "") {
+        playerTwoNameDispaly.innerHTML = playerArray[1]._name;
+    }
+    else{
+        playerTwoNameDispaly.innerHTML = "Player 2";
+    }}
+
+
+fillTurnKeeper();
 

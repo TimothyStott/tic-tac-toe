@@ -23,6 +23,33 @@ main{
     display: grid;     
 }
 
+.header{
+    grid-template-columns: auto auto auto;
+}
+
+.score-title{
+    grid-column: 1/4;
+    place-self: center;
+}
+
+.player-one-display-container, .player-two-display-container{
+    font-size: 1.25rem;
+}
+
+.player-one-display-container{
+    display: grid;
+}
+
+.player-two-display-container{
+    display: grid;
+    justify-content: end;
+    text-align: right;    
+}
+
+.turn-keeper-container{
+    text-align: center;
+}
+
 .button-container{
     grid-template-columns: auto auto;
 }

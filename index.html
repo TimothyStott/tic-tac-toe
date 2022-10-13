@@ -12,14 +12,14 @@
 
 <body>
 
-    <div class="modal-container">
+    <div class="modal-container hide">
         <div class="modal">
             <div class="modal-head">
                 <h1>Player Setup</h1>
             </div>
             <div class="p1">
                 <form class="player-form">
-                    
+
                     <label for="name-one">Enter Name</label>
                     <input type="text" name="player-one-name" id="player-one-name" placeholder="Player 1">
 
@@ -29,7 +29,7 @@
             </div>
             <div class="p2">
                 <form class="player-form">
-                    
+
                     <label for="name-two">Enter Name</label>
                     <input type="text" name="player-two-name" id="player-two-name" placeholder="Player 2">
 
@@ -47,10 +47,26 @@
 
     <main>
         <div class="header">
-            <h1>Score Board</h1>
-            <h2>You: </h2>
-            <h2>AI: </h2>
-        </div> 
+            <h1 class="score-title">Score Board</h1>
+
+
+            <div class="player-one-display-container">
+                <h2 class="player-one-name-display">Player 1 </h2>
+                <p class="p1-score-display">0</p>
+            </div>
+
+            <div class="turn-keeper-container">
+                <h2>Turn </h2>
+                <p class="turn-dispay"></p>
+            </div>
+
+
+
+            <div class="player-two-display-container">
+                <h2 class="player-two-name-display">Player 2 </h2>
+                <p class="p2-score-display">0</p>
+            </div>
+        </div>
         <div class="board-game-container">
             <div class="game-square">
                 <div class="game-square-content" id="0">
@@ -59,45 +75,45 @@
             </div>
             <div class="game-square">
                 <div class="game-square-content" id="1">
-                    <p class="game-square-text"></p>                    
-                </div>
-            </div>
-            <div class="game-square"> 
-                <div class="game-square-content"  id="2">
-                    <p class="game-square-text"></p>                    
+                    <p class="game-square-text"></p>
                 </div>
             </div>
             <div class="game-square">
-                <div class="game-square-content"  id="3">
-                    <p class="game-square-text"></p>                    
+                <div class="game-square-content" id="2">
+                    <p class="game-square-text"></p>
                 </div>
             </div>
             <div class="game-square">
-                <div class="game-square-content"  id="4">
-                    <p class="game-square-text"></p>                    
+                <div class="game-square-content" id="3">
+                    <p class="game-square-text"></p>
                 </div>
             </div>
             <div class="game-square">
-                <div class="game-square-content"  id="5">
-                    <p class="game-square-text"></p>                    
+                <div class="game-square-content" id="4">
+                    <p class="game-square-text"></p>
+                </div>
+            </div>
+            <div class="game-square">
+                <div class="game-square-content" id="5">
+                    <p class="game-square-text"></p>
                 </div>
             </div>
             <div class="game-square">
                 <div class="game-square-content" id="6">
                     <p class="game-square-text"></p>
-                    
+
                 </div>
             </div>
             <div class="game-square">
-                <div class="game-square-content"  id="7">
+                <div class="game-square-content" id="7">
                     <p class="game-square-text"></p>
-                    
+
                 </div>
             </div>
             <div class="game-square">
-                <div class="game-square-content"  id="8">
+                <div class="game-square-content" id="8">
                     <p class="game-square-text"></p>
-                    
+
                 </div>
             </div>
         </div>
